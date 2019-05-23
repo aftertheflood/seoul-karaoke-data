@@ -1,10 +1,11 @@
 <html>
 <script src="https://d3js.org/d3.v5.min.js"></script>
-<h1>Karaoke permit ages</h2>
+<style>svg{
+  padding:10px;
+}</style>
+<h1>Karaoke active permits</h2>
 <div class="visualizations"></div>
-<style>
-svg{margin:30;}
-</style>
+
 <script>
 const width = 45.5; 
 const height = 45.5;
@@ -12,36 +13,32 @@ const margin={ top:0, left:0, bottom:0, right:0 };
 const plotWidth = width - (margin.left+margin.right);
 const plotHeight = height - (margin.top+margin.bottom);
 
-const ageScale = d3.scaleLinear()
-  .domain([0, 21])
+const timeScale = d3.scaleTime()
+  .domain([new Date(2000, 0, 1), new Date()])
   .range([0, plotWidth]);
 
-
 const countScale = d3.scaleLinear()
-  .domain([0, 120])
-  .range([0, plotHeight]);
+  .domain([0, 660])
+  .range([plotHeight, 0]);
+
+const parse = d3.timeParse('%Y-%m')
+
+const path = d3.line()
+  .x(d=>timeScale(parse(d.month)))
+  .y(d=>countScale(d.count));
 
 function plot([name, data]){
   console.log(data);
-  console.log('?',countScale(4))
 
   d3.select(this)
-    .selectAll('rect')
-    .data(data.bins)
-      .enter()
-    .append('rect')
-      .attr('x',(d,i)=>ageScale(i))
-      .attr('y',(d,i)=>plotHeight-(countScale(d.length)))
-      .attr('id',(d,i)=>`${name}-${i}-years-${d.length}-active-permits`)
-      .attr('width', plotWidth/21)
-      .attr('height',d=>{
-        console.log(d.length, countScale(d.length));
-        return countScale(d.length);
-      });
+    .append('path')
+      .attr('d', path(data))
+      .attr('fill', 'none')
+      .attr('stroke', '#000');
 
 }
 
-d3.json('../data/district-age-distributions.json')
+d3.json('../data/district-monthly-counts.json')
   .then(data=>{
     console.log(data);
     d3.select('.visualizations')

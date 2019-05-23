@@ -1,0 +1,26 @@
+{
+  "name": "seoul-karaoke",
+  "version": "1.0.0",
+  "description": "",
+  "main": "process-data.js",
+  "dependencies": {
+    "browser-sync": "^2.26.5",
+    "d3": "^5.9.2",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "serve": "npx browser-sync start -s",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomgp/seoul-karaoke.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomgp/seoul-karaoke/issues"
+  },
+  "homepage": "https://github.com/tomgp/seoul-karaoke#readme"
+}
