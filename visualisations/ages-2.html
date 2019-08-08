@@ -1,0 +1,64 @@
+<html>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<h1>Karaoke venue ages</h2>
+<div class="visualizations"></div>
+<style>
+svg{margin:30; border:1px solid grey;}
+</style>
+<script>
+const width = 45.5; 
+const height = 45.5;
+const margin={ top:0, left:0, bottom:0, right:0 };
+const plotWidth = width - (margin.left+margin.right);
+const plotHeight = height - (margin.top+margin.bottom);
+
+const ageScale = d3.scaleLinear()
+  .domain([0, 20])
+  .range([0, plotHeight]);
+
+
+const countScale = d3.scaleLinear()
+  .domain([0, 82])
+  .range([0, plotWidth]);
+
+function plot([name, data]){
+  console.log(data);
+  console.log('?',countScale(4))
+
+  d3.select(this)
+    .selectAll('rect')
+    .data(data.bins)
+      .enter()
+    .append('rect')
+      .attr('y', (d,i)=>{
+        return ageScale(i)
+      })
+      .attr('x', (d,i)=>{
+        return plotWidth/2 - countScale(d.length)/2;
+      })
+      .attr('id',(d,i)=>`${name}-${i}-years-${d.length}-active-permits`)
+      .attr('height', plotWidth/21)
+      .attr('width',d=>{
+        return countScale(d.length);
+      });
+
+}
+
+d3.json('../data/district-age-distributions.json')
+  .then(data=>{
+    console.log(data);
+    d3.select('.visualizations')
+      .selectAll('svg')
+    .data(Object.entries(data))
+      .enter()
+    .append('svg')
+      .attr('id',d=>d[0])
+      .attr('width', width)
+      .attr('height', height)
+    .append('g')
+      .attr('class', 'plot')
+      .attr('id',([name, data])=>name)
+      .attr('transform',`translate(${margin.left},${margin.top})`)
+    .each(plot)
+  })
+</script>

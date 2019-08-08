@@ -89,13 +89,17 @@ const processed = data.map(d=>{
 
 fs.writeFileSync('./data/processed-data.tsv', d3.tsvFormat(processed));
 
-const districtData = processed.reduce((acc, current)=>{
-  if(!acc[current["district-en"]]){
-    acc[current["district-en"]] = [];
-  }
-  acc[current["district-en"]].push(current);
-  return acc;
-},{});
+const districtData = processed
+  .filter((row)=>{
+    return row.closeDate == null;
+  })
+  .reduce((acc, current)=>{
+    if(!acc[current["district-en"]]){
+      acc[current["district-en"]] = [];
+    }
+    acc[current["district-en"]].push(current);
+    return acc;
+  },{});
 
 fs.writeFileSync('./data/districts.json', JSON.stringify(districtData,null,' '));
 

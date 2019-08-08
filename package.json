@@ -4,9 +4,9 @@
   "description": "",
   "main": "process-data.js",
   "dependencies": {
-    "browser-sync": "^2.26.5",
+    "browser-sync": "^2.26.7",
     "d3": "^5.9.2",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.15"
   },
   "devDependencies": {},
   "scripts": {
